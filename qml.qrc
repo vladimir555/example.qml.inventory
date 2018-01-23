@@ -5,4 +5,10 @@
     <qresource prefix="/image">
         <file alias="apple">image/apple.png</file>
     </qresource>
+    <qresource prefix="/db">
+        <file alias="inventory">db/inventory.sqlite</file>
+    </qresource>
+    <qresource prefix="/sound">
+        <file alias="bite">sound/bite.wav</file>
+    </qresource>
 </RCC>
