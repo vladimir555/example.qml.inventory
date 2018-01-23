@@ -57,6 +57,7 @@ Window {
             Layout.alignment: Qt.AlignCenter
 
             GridLayout {
+                id: gridPlayground
                 columns: 3
                 rows: 3
 
@@ -70,18 +71,49 @@ Window {
                         border.width: 1
                         width: 72
                         height: 72
+
+                        DropArea {
+                            anchors.fill: parent
+                            onDropped: function(drag) {
+                                console.log("dropped: " + drag.text)
+                                drag.accept()
+                            }
+                        }
+
                         Image {
                             id: image
                             sourceSize.width: 64
                             sourceSize.height: 64
                             source: "qrc:///image/apple"
                             anchors.centerIn: parent
-    //                        source: ""
 
                             Text {
+                                id: text
                                 anchors.right: parent.right
                                 anchors.bottom: parent.bottom
                                 text: qsTr("1")
+                            }
+
+                            Drag.active: dragArea.drag.active
+                            Drag.dragType: Drag.Automatic
+                            Drag.supportedActions: Qt.MoveAction
+                            Drag.source: parent
+                            Drag.mimeData: {
+                                "text/plain": "index " + index
+                            }
+
+                            MouseArea {
+                                id: dragArea
+                                anchors.fill: parent
+
+                                drag.target: parent
+                                onPressed: parent.grabToImage(
+                                    function(result) {
+                                        console.log("pressed: " + result.url)
+                                        parent.Drag.imageSource = result.url
+                                        parent.Drag.text = result.url
+                                    }
+                                )
                             }
                         }
                     }
