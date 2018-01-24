@@ -1,4 +1,4 @@
-QT += quick
+QT += quick sql
 CONFIG += c++11
 
 # The following define makes your compiler emit warnings if you use
@@ -12,7 +12,13 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
-SOURCES += main.cpp
+SOURCES += main.cpp \
+    source/controller/main_controller.cpp \
+    source/model/db.cpp \
+    source/model/inventory.cpp \
+    source/model/item.cpp \
+    source/utility/exception.cpp \
+    source/view/main_form.cpp
 
 RESOURCES += qml.qrc
 
@@ -28,3 +34,20 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 DISTFILES +=
+
+HEADERS += \
+    source/controller/main_controller.h \
+    source/model/cell.h \
+    source/model/db.h \
+    source/model/inventory.h \
+    source/model/item.h \
+    source/utility/pattern/initializable.h \
+    source/utility/pattern/non_copyable.h \
+    source/utility/pattern/non_movable.h \
+    source/utility/pattern/singleton.h \
+    source/utility/assert.h \
+    source/utility/exception.h \
+    source/utility/smart_ptr.h \
+    source/view/main_form.h
+
+INCLUDEPATH += source/
