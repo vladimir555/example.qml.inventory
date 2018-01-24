@@ -6,7 +6,7 @@ namespace model {
 
 Item::Item(Item::TType const &type, QString const &resource)
 :
-    m_icon_path(":/images/" + resource),
+    m_icon_path("image/" + resource),
     m_type(type)
 {
 //    switch (m_type) {

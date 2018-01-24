@@ -5,14 +5,27 @@ import QtQuick.Controls 1.4
 import QtQuick.Layouts 1.3
 
 
-Window {
+ApplicationWindow {
+
+    function printObject(obj) {
+        var output = '';
+        for (var property in obj) {
+          output += property + ': ' + obj[property]+';\n';
+        }
+        console.log(output)
+    }
+
+
     visible: true
-    minimumWidth: 310
-    minimumHeight: 270
-    maximumWidth: 320
-    maximumHeight: 240
+    width: 310
+    height: 270
+    minimumWidth: width
+    minimumHeight: height
+    maximumWidth: width
+    maximumHeight: height
     title: qsTr("Inventory")
-    id: window
+    id: windowMain
+    objectName: "windowMain"
 
     GridLayout {
         id: gridWindow
@@ -46,7 +59,7 @@ Window {
                 id: buttonExit
                 width: parent.width / 2
 
-                onClicked: window.close()
+                onClicked: windowMain.close()
             }
         }
 
@@ -64,7 +77,7 @@ Window {
                 Layout.alignment: Qt.AlignCenter
 
                 Repeater {
-                    id: buttons
+                    id: items
                     model: 9
 
                     delegate: Rectangle {
@@ -72,23 +85,15 @@ Window {
                         width: 72
                         height: 72
 
-                        DropArea {
-                            anchors.fill: parent
-                            onDropped: function(drag) {
-                                console.log("dropped: " + drag.text)
-                                drag.accept()
-                            }
-                        }
-
                         Image {
-                            id: image
+                            id: imageItem
                             sourceSize.width: 64
                             sourceSize.height: 64
                             source: "qrc:///image/apple"
                             anchors.centerIn: parent
 
                             Text {
-                                id: text
+                                id: textImage
                                 anchors.right: parent.right
                                 anchors.bottom: parent.bottom
                                 text: qsTr("1")
@@ -109,11 +114,37 @@ Window {
                                 drag.target: parent
                                 onPressed: parent.grabToImage(
                                     function(result) {
-                                        console.log("pressed: " + result.url)
+//                                        console.log("pressed: " + result.url)
                                         parent.Drag.imageSource = result.url
                                         parent.Drag.text = result.url
                                     }
                                 )
+                            }
+                        }
+
+                        DropArea {
+                            anchors.fill: parent
+
+                            onDropped: function(drag) {
+                                var index_from = drag.text.split(" ")[1]
+                                var from = Qt.size(index_from % gridPlayground.columns,
+                                    Math.floor(index_from / gridPlayground.columns))
+                                var to   = Qt.size(index  % gridPlayground.columns,
+                                    Math.floor(index      / gridPlayground.columns))
+                                var cell = JSON.parse(form.onMoveCell(from, to))
+                                imageItem.source = cell.url
+                                if (cell.count === 0)
+                                    textImage.text = ""
+                                else
+                                    textImage.text = cell.count
+                                drag.accept()
+
+
+
+//                                printObject()
+//                                var item_from = items[index_from]
+//                                item_from.imageItem.source = ""
+//                                item_from.imageItem.textImage.text = ""
                             }
                         }
                     }

@@ -2,6 +2,8 @@
 #define MAIN_FORM_H
 
 #include <QObject>
+#include <QQmlApplicationEngine>
+#include <QString>
 
 #include "model/cell.h"
 
@@ -16,8 +18,12 @@ public:
     virtual ~MainForm() = default;
 
 public slots:
-    model::TCell onMoveCell(QSize const &from, QSize const &to);
-    model::TCell onBiteCell(QSize const &pos);
+    Q_INVOKABLE QString onMoveCell(QSize const &from, QSize const &to);
+    Q_INVOKABLE model::TCell onBiteCell(QSize const &pos);
+
+private:
+    QQmlApplicationEngine   m_qml_engine;
+//    QQuickView              m_view;
 };
 
 

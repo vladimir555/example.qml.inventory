@@ -53,6 +53,8 @@ TCell CInventory::moveCell(QSize const &from, QSize const &to) {
         } else
             throw Exception("inventory: source and destination items are not equal");
     }
+    cell(from).count = 0;
+    cell(from).item.reset();
     return cell(to);
 }
 
