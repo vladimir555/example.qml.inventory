@@ -21,9 +21,9 @@ class IInventory {
 public:
     DEFINE_INTERFACE(IInventory)
 
-    virtual int   moveCell(QSize const &from, QSize const &to) = 0;
+    virtual TCell moveCell(QSize const &from, QSize const &to) = 0;
     virtual TCell get     (QSize const &pos) = 0;
-    virtual void  set     (QSize const &pos, TCell const &cell) = 0;
+    virtual TCell bite    (QSize const &pos) = 0;
 };
 
 
@@ -38,10 +38,10 @@ public:
     virtual ~CInventory() = default;
 
     void  add           (QSize const &pos, Item const &item);
-    void  decreaseItem  (QSize const &pos);
-    int   moveCell      (QSize const &from, QSize const &to) override;
+    TCell bite          (QSize const &pos) override;
+    TCell moveCell      (QSize const &from, QSize const &to) override;
     TCell get           (QSize const &pos) override;
-    void  set           (QSize const &pos, TCell const &cell) override;
+    void  set           (QSize const &pos, TCell const &cell);
 
     virtual void initialize() override;
     virtual void finalize() override;

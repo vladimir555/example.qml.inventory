@@ -50,7 +50,7 @@ void MainController::finalize() {
 }
 
 
-int MainController::moveCell(QSize const &from, QSize const &to) {
+TCell MainController::moveCell(QSize const &from, QSize const &to) {
     QMutexLocker l(&m_mutex);
     return inventory()->moveCell(from, to);
 }
@@ -62,11 +62,11 @@ TCell MainController::get(QSize const &pos) {
 }
 
 
-void MainController::set(QSize const &pos, TCell const &cell) {
+TCell MainController::bite(QSize const &pos) {
     QMutexLocker l(&m_mutex);
-    qDebug() << "set " << pos << " " << cell.count;
-    inventory()->set(pos, cell);
-    //    QSound::play(":/sounds/bite");
+    auto cell = inventory()->bite(pos);
+//    QSound::play(":/sounds/bite");
+    return cell;
 }
 
 

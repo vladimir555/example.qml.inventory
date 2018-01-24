@@ -34,16 +34,15 @@ void CInventory::add(QSize const &pos, Item const &item) {
 }
 
 
-void CInventory::decreaseItem(QSize const &pos) {
+TCell CInventory::bite(QSize const &pos) {
     assertPos(pos);
-    if (cell(pos).count > 0) {
+    if (cell(pos).count > 0)
         cell(pos).count--;
-        //todo: sound
-    }
+    return cell(pos);
 }
 
 
-int CInventory::moveCell(QSize const &from, QSize const &to) {
+TCell CInventory::moveCell(QSize const &from, QSize const &to) {
     assertPos(from);
     assertPos(to);
 
@@ -54,7 +53,7 @@ int CInventory::moveCell(QSize const &from, QSize const &to) {
         } else
             throw Exception("inventory: source and destination items are not equal");
     }
-    return cell(to).count;
+    return cell(to);
 }
 
 
