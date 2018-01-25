@@ -29,7 +29,7 @@ MainForm::MainForm()
 
 QString MainForm::onMoveCell(const QSize &from, const QSize &to) {
     QJsonObject result;
-    auto cell       = MainController::instance().moveCell(from, to);
+    auto cell = MainController::instance().moveCell(from, to);
 
     if (cell.item)
         result["url"] = cell.item->getIconPath();

@@ -69,7 +69,7 @@ ApplicationWindow {
 
             Layout.alignment: Qt.AlignCenter
 
-            GridLayout {
+            Grid {
                 id: gridPlayground
                 columns: 3
                 rows: 3
@@ -81,9 +81,12 @@ ApplicationWindow {
                     model: 9
 
                     delegate: Rectangle {
+                        id: item
                         border.width: 1
                         width: 72
                         height: 72
+
+                        property string items_text: ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
 
                         Image {
                             id: imageItem
@@ -93,18 +96,18 @@ ApplicationWindow {
                             anchors.centerIn: parent
 
                             Text {
-                                id: textImage
+                                id: textItem
                                 anchors.right: parent.right
                                 anchors.bottom: parent.bottom
-                                text: qsTr("1")
+                                text: items_text[index]
                             }
 
                             Drag.active: dragArea.drag.active
                             Drag.dragType: Drag.Automatic
                             Drag.supportedActions: Qt.MoveAction
-                            Drag.source: parent
+                            Drag.source: item
                             Drag.mimeData: {
-                                "text/plain": "index " + index
+                                "text/plain": index
                             }
 
                             MouseArea {
@@ -114,9 +117,9 @@ ApplicationWindow {
                                 drag.target: parent
                                 onPressed: parent.grabToImage(
                                     function(result) {
-//                                        console.log("pressed: " + result.url)
                                         parent.Drag.imageSource = result.url
                                         parent.Drag.text = result.url
+                                        parent.Drag.startDrag()
                                     }
                                 )
                             }
@@ -126,23 +129,39 @@ ApplicationWindow {
                             anchors.fill: parent
 
                             onDropped: function(drag) {
-                                var index_from = drag.text.split(" ")[1]
+                                var index_from = drag.text
                                 var from = Qt.size(index_from % gridPlayground.columns,
                                     Math.floor(index_from / gridPlayground.columns))
                                 var to   = Qt.size(index  % gridPlayground.columns,
                                     Math.floor(index      / gridPlayground.columns))
                                 var cell = JSON.parse(form.onMoveCell(from, to))
                                 imageItem.source = cell.url
-                                if (cell.count === 0)
-                                    textImage.text = ""
-                                else
-                                    textImage.text = cell.count
+                                if (cell.count === 0) {
+                                    textItem.text = ""
+                                    imageItem.source = ""
+                                } else
+                                    textItem.text = cell.count
                                 drag.accept()
+//                                drag.source = "!";
+//                                printObject(gridPlayground.data[1].data.imageItem)
+//                                printObject(gridPlayground.data[1].imageItem)
 
+
+                                console.log("from: " + index_from)
+//                                items_text[index_from] = "55"
+//                                for (var i = 0; i < items.count; i++) {
+
+//                                    console.log(items.itemAt(i).visible)
+//                                }
 
 
 //                                printObject()
-//                                var item_from = items[index_from]
+//                                var item_from = gridPlayground.children[index_from]
+//                                printObject(item_from)
+
+//                                console.log(gridPlayground)
+//                                item_from.enabled = false
+//                                item_from.text = ""
 //                                item_from.imageItem.source = ""
 //                                item_from.imageItem.textImage.text = ""
                             }
@@ -158,10 +177,45 @@ ApplicationWindow {
 
                 Image {
                     id: imageSource
-                    source: "qrc:///image/apple"
                     sourceSize.width: 64
                     sourceSize.height: 64
+                    source: "qrc:///image/apple"
+//                    anchors.top: parent
+
+                    Drag.active: dragArea.drag.active
+                    Drag.dragType: Drag.Automatic
+                    Drag.supportedActions: Qt.MoveAction
+                    Drag.source: parent
+                    Drag.mimeData: {
+                        "text/plain": index
+                    }
+
+                    MouseArea {
+                        id: dragAreaSource
+                        anchors.fill: parent
+                        drag.target: parent
+                        onPressed: parent.grabToImage(
+                            function(result) {
+                                parent.Drag.imageSource = result.url
+                                parent.Drag.text = "-1"
+                            }
+                        )
+                    }
+
+                    DropArea {
+                        anchors.fill: parent
+
+                        onDropped: function(drag) {
+                            drag.accept()
+                        }
+                    }
                 }
+//                Image {
+//                    id: imageSource
+//                    source: "qrc:///image/apple"
+//                    sourceSize.width: 64
+//                    sourceSize.height: 64
+//                }
 
                 Button {
                     text: qsTr("Menu")

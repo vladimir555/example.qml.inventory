@@ -46,8 +46,9 @@ TCell CInventory::moveCell(QSize const &from, QSize const &to) {
     assertPos(from);
     assertPos(to);
 
-    if (cell(from).count > 0 && cell(from).item == cell(to).item) {
-        if (cell(from).item == cell(to).item) {
+    qDebug() << "from " << from << " " << cell(from).count << " to " << to << " " << cell(to).count;
+    if (cell(from).count > 0 && cell(from).item) {
+        if (!cell(to).item || (cell(to).item && *cell(from).item == *cell(to).item)) {
             cell(to).count  += cell(from).count;
             cell(from).count = 0;
         } else
@@ -55,6 +56,9 @@ TCell CInventory::moveCell(QSize const &from, QSize const &to) {
     }
     cell(from).count = 0;
     cell(from).item.reset();
+
+    qDebug() << "from " << from << " " << cell(from).count << " to " << to << " " << cell(to).count;
+
     return cell(to);
 }
 
