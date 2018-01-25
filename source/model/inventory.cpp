@@ -50,7 +50,9 @@ TCell CInventory::moveCell(QSize const &from, QSize const &to) {
     if (cell(from).count > 0 && cell(from).item) {
         if (!cell(to).item || (cell(to).item && *cell(from).item == *cell(to).item)) {
             cell(to).count  += cell(from).count;
+            cell(to).item    = cell(from).item;
             cell(from).count = 0;
+
         } else
             throw Exception("inventory: source and destination items are not equal");
     }

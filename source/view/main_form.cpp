@@ -19,17 +19,27 @@ MainForm::MainForm()
 :
     m_qml_engine(QUrl("qrc:/main.qml"))
 {
-//    auto child = m_qml_engine.findChildren("window");
-//    child->setProperty("form", this);
-//    m_qml_engine.rootContext()
-//    m_qml_engine.set
     m_qml_engine.rootContext()->setContextProperty("form", this);
 }
 
 
 QString MainForm::onMoveCell(const QSize &from, const QSize &to) {
+    return convertCellToJson(MainController::instance().moveCell(from, to));
+}
+
+
+QString MainForm::onBiteCell(QSize const &pos) {
+    return convertCellToJson(MainController::instance().bite(pos));
+}
+
+
+QString MainForm::onGetCell(QSize const &pos) {
+    return convertCellToJson(MainController::instance().get(pos));
+}
+
+
+QString MainForm::convertCellToJson(model::TCell const &cell) {
     QJsonObject result;
-    auto cell = MainController::instance().moveCell(from, to);
 
     if (cell.item)
         result["url"] = cell.item->getIconPath();
@@ -39,11 +49,6 @@ QString MainForm::onMoveCell(const QSize &from, const QSize &to) {
     result["count"] = QString::number(cell.count);
 
     return QJsonDocument(result).toJson();
-}
-
-
-TCell MainForm::onBiteCell(QSize const &pos) {
-    return MainController::instance().bite(pos);
 }
 
 

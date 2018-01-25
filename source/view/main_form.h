@@ -19,11 +19,13 @@ public:
 
 public slots:
     Q_INVOKABLE QString onMoveCell(QSize const &from, QSize const &to);
-    Q_INVOKABLE model::TCell onBiteCell(QSize const &pos);
+    Q_INVOKABLE QString onBiteCell(QSize const &pos);
+    Q_INVOKABLE QString onGetCell(QSize const &pos);
 
 private:
+    static QString convertCellToJson(model::TCell const &cell);
+
     QQmlApplicationEngine   m_qml_engine;
-//    QQuickView              m_view;
 };
 
 

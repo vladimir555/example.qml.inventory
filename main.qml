@@ -69,7 +69,9 @@ ApplicationWindow {
 
             Layout.alignment: Qt.AlignCenter
 
-            Grid {
+
+
+            GridLayout {
                 id: gridPlayground
                 columns: 3
                 rows: 3
@@ -77,8 +79,21 @@ ApplicationWindow {
                 Layout.alignment: Qt.AlignCenter
 
                 Repeater {
-                    id: items
+                    id: repeaterItems
                     model: 9
+
+                    property var items: []
+                    function onIndexCreate(index, text, image) {
+                        items.push({"text": text, "image": image})
+                        return index
+                    }
+
+                    function getCell(index) {
+                        var pos  =   Qt.size(index % gridPlayground.columns,
+                                  Math.floor(index / gridPlayground.columns))
+                        var cell = form.onGetCell(pos)
+                        return JSON.stringify(cell)
+                    }
 
                     delegate: Rectangle {
                         id: item
@@ -86,28 +101,26 @@ ApplicationWindow {
                         width: 72
                         height: 72
 
-                        property string items_text: ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
-
                         Image {
                             id: imageItem
                             sourceSize.width: 64
                             sourceSize.height: 64
-                            source: "qrc:///image/apple"
+                            source: ""
                             anchors.centerIn: parent
 
                             Text {
                                 id: textItem
                                 anchors.right: parent.right
                                 anchors.bottom: parent.bottom
-                                text: items_text[index]
+                                text: ""
                             }
 
                             Drag.active: dragArea.drag.active
                             Drag.dragType: Drag.Automatic
                             Drag.supportedActions: Qt.MoveAction
-                            Drag.source: item
+                            Drag.source: parent
                             Drag.mimeData: {
-                                "text/plain": index
+                                "text/plain": repeaterItems.onIndexCreate(index, textItem, imageItem)
                             }
 
                             MouseArea {
@@ -119,7 +132,6 @@ ApplicationWindow {
                                     function(result) {
                                         parent.Drag.imageSource = result.url
                                         parent.Drag.text = result.url
-                                        parent.Drag.startDrag()
                                     }
                                 )
                             }
@@ -135,35 +147,18 @@ ApplicationWindow {
                                 var to   = Qt.size(index  % gridPlayground.columns,
                                     Math.floor(index      / gridPlayground.columns))
                                 var cell = JSON.parse(form.onMoveCell(from, to))
-                                imageItem.source = cell.url
-                                if (cell.count === 0) {
-                                    textItem.text = ""
-                                    imageItem.source = ""
-                                } else
-                                    textItem.text = cell.count
+
+                                if (cell.url === "" || cell.count === 0) {
+                                    imageItem.visible = false
+                                } else {
+                                    textItem.text       = cell.count
+                                    imageItem.source    = cell.url
+
+                                    imageItem.visible   = true
+                                }
                                 drag.accept()
-//                                drag.source = "!";
-//                                printObject(gridPlayground.data[1].data.imageItem)
-//                                printObject(gridPlayground.data[1].imageItem)
 
-
-                                console.log("from: " + index_from)
-//                                items_text[index_from] = "55"
-//                                for (var i = 0; i < items.count; i++) {
-
-//                                    console.log(items.itemAt(i).visible)
-//                                }
-
-
-//                                printObject()
-//                                var item_from = gridPlayground.children[index_from]
-//                                printObject(item_from)
-
-//                                console.log(gridPlayground)
-//                                item_from.enabled = false
-//                                item_from.text = ""
-//                                item_from.imageItem.source = ""
-//                                item_from.imageItem.textImage.text = ""
+                                repeaterItems.items[index_from].image.visible = false
                             }
                         }
                     }
@@ -182,12 +177,12 @@ ApplicationWindow {
                     source: "qrc:///image/apple"
 //                    anchors.top: parent
 
-                    Drag.active: dragArea.drag.active
+//                   todo: Drag.active: dragArea.drag.active
                     Drag.dragType: Drag.Automatic
                     Drag.supportedActions: Qt.MoveAction
                     Drag.source: parent
                     Drag.mimeData: {
-                        "text/plain": index
+                        "text/plain": -1
                     }
 
                     MouseArea {
