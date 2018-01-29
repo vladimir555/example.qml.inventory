@@ -30,7 +30,7 @@ ApplicationWindow {
         for (var i = 0; i < repeaterItems.items.length; i++) {
             var cell = repeaterItems.getCell(i)
 
-            if (cell.count === 0 || cell.url === "") {
+            if (cell.count === "0" || cell.url === "") {
                 repeaterItems.items[i].text.text        = ""
                 repeaterItems.items[i].image.source     = ""
                 repeaterItems.items[i].image.visible    = false
@@ -217,7 +217,7 @@ ApplicationWindow {
 
 //                   todo: Drag.active: dragArea.drag.active
                     Drag.dragType: Drag.Automatic
-                    Drag.supportedActions: Qt.MoveAction
+                    Drag.supportedActions: Qt.CopyAction
                     Drag.source: parent
                     Drag.mimeData: {
                         "text/plain": -1

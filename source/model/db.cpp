@@ -45,6 +45,7 @@ void DB::initialize() {
         qDebug() << "create " << DB_NAME;
         QDir().mkdir(DB_DIR);
         QFile::copy(":/db/inventory", DB_NAME);
+        QFile::setPermissions(DB_NAME, QFileDevice::ReadOwner | QFileDevice::WriteOwner);
     }
 
     m_database = QSharedPointer<QSqlDatabase>::create(QSqlDatabase::addDatabase(DB_TYPE));
@@ -72,11 +73,8 @@ void DB::updateCell(QSize const &pos, TCell const &cell) {
         id_type = QString::number(cell.item->getType());
 
     QString query =
-        "update " + TABLE_ITEMS + " set " + FIELD_ID_W + " = " + QString::number(pos.width()) +
-        ", " + FIELD_ID_H + " = " + QString::number(pos.height()) + ", " +
-            FIELD_ID_TYPE + " = " + id_type + ", " + FIELD_COUNT + " = " + count;
-
-
+        "insert or replace into " + TABLE_ITEMS + "(" + FIELD_ID_W + ", " + FIELD_ID_H + ", " + FIELD_ID_TYPE + ", " + FIELD_COUNT + ") values (" +
+        QString::number(pos.width()) + ", " + QString::number(pos.height()) + ", " + id_type + ", " + count + ");";
 
     m_database->exec(query);
 
