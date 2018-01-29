@@ -40,8 +40,12 @@ QString MainForm::onGetCell(QSize const &pos) {
 
 
 void MainForm::onIncCell(QSize const &pos) {
-    qDebug() << "on inc " << pos;
     MainController::instance().inc(pos);
+}
+
+
+void MainForm::onReset() {
+    MainController::instance().reset();
 }
 
 

@@ -35,6 +35,7 @@ public:
     model::TCell get        (QSize const &pos) override;
     void         set        (QSize const &pos, model::TCell const &cell) override;
     model::TCell bite       (QSize const &pos) override;
+    void         reset      () override;
 
     void         inc        (QSize const &pos);
 

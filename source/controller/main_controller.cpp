@@ -29,6 +29,7 @@ void MainController::initialize() {
             m_inventory->initialize();
         }
     } catch (Exception const &e) {
+        qDebug() << e.what();
 //        QMessageBox mbox;
 //        mbox.critical(0, "Fatal error", e.what());
         throw;
@@ -45,6 +46,7 @@ void MainController::finalize() {
             m_db->finalize();
 
     } catch (Exception const &e) {
+        qDebug() << e.what();
 //        QMessageBox mbox;
 //        mbox.critical(0, "Fatal error", e.what());
     }
@@ -74,6 +76,12 @@ TCell MainController::bite(QSize const &pos) {
     auto cell = inventory()->bite(pos);
     QSound::play(":/sound/bite");
     return cell;
+}
+
+
+void MainController::reset() {
+    QMutexLocker l(&m_mutex);
+    inventory()->reset();
 }
 
 

@@ -77,6 +77,19 @@ void CInventory::set(QSize const &pos, TCell const &cell_) {
 }
 
 
+void CInventory::reset() {
+    for (auto h = 0; h < m_size.height(); h++) {
+        for (auto w = 0; w < m_size.width(); w++) {
+            auto pos = QSize(w, h);
+            cell(pos).count = 0;
+            cell(pos).item.reset();
+            // maybe just clean table
+            m_db->updateCell(pos, cell(pos));
+        }
+    }
+}
+
+
 void CInventory::initialize() {
     for (auto h = 0; h < m_size.height(); h++) {
         for (auto w = 0; w < m_size.width(); w++) {

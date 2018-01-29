@@ -73,7 +73,15 @@ ApplicationWindow {
                 text: qsTr("Start")
                 id: buttonStart
                 width: parent.width / 2
-                onClicked: parent.visible = false
+                onClicked: {
+                    for (var i = 0; i < repeaterItems.items.length; i++) {
+                        repeaterItems.items[i].image.visible = false
+                        repeaterItems.items[i].text = ""
+                    }
+
+                    form.onReset()
+                    parent.visible = false
+                }
             }
 
             Button {
@@ -157,7 +165,6 @@ ApplicationWindow {
                                     }
                                 )
                                 onClicked: {
-                                    console.log(dragArea.pressedButtons)
                                     if(mouse.button === Qt.RightButton) {
                                         var to   = Qt.size(index  % gridPlayground.columns,
                                             Math.floor(index      / gridPlayground.columns))
@@ -186,7 +193,6 @@ ApplicationWindow {
                                     textItem.text       = Number(textItem.text) + 1
                                     imageItem.source    = imageItem2.source
                                     imageItem.visible   = true
-                                    console.log(to)
                                     form.onIncCell(to)
                                 } else {
                                     var from = Qt.size(index_from % gridPlayground.columns,
@@ -303,7 +309,6 @@ ApplicationWindow {
                     id: buttonMenu
                     Layout.alignment: Qt.AlignRight
                     onClicked: {
-                        initializeQML()
                         gridMenu.visible = true
                     }
                 }
