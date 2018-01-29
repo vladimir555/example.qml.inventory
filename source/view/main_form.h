@@ -22,6 +22,7 @@ public slots:
     Q_INVOKABLE QString onMoveCell(QSize const &from, QSize const &to);
     Q_INVOKABLE QString onBiteCell(QSize const &pos);
     Q_INVOKABLE QString onGetCell(QSize const &pos);
+    Q_INVOKABLE void    onIncCell(QSize const &pos);
 
 private:
     static QString convertCellToJson(model::TCell const &cell);

@@ -33,12 +33,15 @@ public:
 
     model::TCell moveCell   (QSize const &from, QSize const &to) override;
     model::TCell get        (QSize const &pos) override;
+    void         set        (QSize const &pos, model::TCell const &cell) override;
     model::TCell bite       (QSize const &pos) override;
+
+    void         inc        (QSize const &pos);
 
 private:
     friend class utility::pattern::Singleton<MainController>;
 
-    IInventory::TSharedPtr  inventory();
+    IInventory::TSharedPtr          inventory();
 
     QMutex                          m_mutex;
     model::DB::TSharedPtr           m_db;

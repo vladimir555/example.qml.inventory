@@ -39,6 +39,12 @@ QString MainForm::onGetCell(QSize const &pos) {
 }
 
 
+void MainForm::onIncCell(QSize const &pos) {
+    qDebug() << "on inc " << pos;
+    MainController::instance().inc(pos);
+}
+
+
 QString MainForm::convertCellToJson(model::TCell const &cell) {
     QJsonObject result;
 

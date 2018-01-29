@@ -3,6 +3,7 @@
 #include "utility/assert.h"
 
 #include <QDebug>
+#include <QSound>
 
 
 using utility::Exception;
@@ -62,11 +63,25 @@ TCell MainController::get(QSize const &pos) {
 }
 
 
+void MainController::set(QSize const &pos, TCell const &cell) {
+    QMutexLocker l(&m_mutex);
+    inventory()->set(pos, cell);
+}
+
+
 TCell MainController::bite(QSize const &pos) {
     QMutexLocker l(&m_mutex);
     auto cell = inventory()->bite(pos);
-//    QSound::play(":/sounds/bite");
+    QSound::play(":/sound/bite");
     return cell;
+}
+
+
+void MainController::inc(QSize const &pos) {
+    QMutexLocker l(&m_mutex);
+    auto cell = inventory()->get(pos);
+    cell.count++;
+    inventory()->set(pos, cell);
 }
 
 

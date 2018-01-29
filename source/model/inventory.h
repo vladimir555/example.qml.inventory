@@ -23,6 +23,7 @@ public:
 
     virtual TCell moveCell(QSize const &from, QSize const &to) = 0;
     virtual TCell get     (QSize const &pos) = 0;
+    virtual void  set     (QSize const &pos, TCell const &cell) = 0;
     virtual TCell bite    (QSize const &pos) = 0;
 };
 
@@ -41,7 +42,7 @@ public:
     TCell bite          (QSize const &pos) override;
     TCell moveCell      (QSize const &from, QSize const &to) override;
     TCell get           (QSize const &pos) override;
-    void  set           (QSize const &pos, TCell const &cell);
+    void  set           (QSize const &pos, TCell const &cell) override;
 
     virtual void initialize() override;
     virtual void finalize() override;

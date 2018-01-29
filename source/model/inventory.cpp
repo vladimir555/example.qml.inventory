@@ -38,6 +38,7 @@ TCell CInventory::bite(QSize const &pos) {
     assertPos(pos);
     if (cell(pos).count > 0)
         cell(pos).count--;
+    m_db->updateCell(pos, cell(pos));
     return cell(pos);
 }
 
@@ -72,6 +73,7 @@ TCell CInventory::get(QSize const &pos) {
 
 void CInventory::set(QSize const &pos, TCell const &cell_) {
     cell(pos) = cell_;
+    m_db->updateCell(pos, cell_);
 }
 
 
