@@ -1,6 +1,7 @@
 #ifndef MAIN_FORM_H
 #define MAIN_FORM_H
 
+
 #include <QObject>
 #include <QQmlApplicationEngine>
 #include <QString>
@@ -24,8 +25,7 @@ public slots:
 
 private:
     static QString convertCellToJson(model::TCell const &cell);
-
-    QQmlApplicationEngine   m_qml_engine;
+    QQmlApplicationEngine m_qml_engine;
 };
 
 

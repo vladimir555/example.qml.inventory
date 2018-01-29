@@ -3,6 +3,7 @@
 
 
 #include <QMutex>
+#include <QObject>
 
 #include "utility/pattern/singleton.h"
 #include "utility/pattern/initializable.h"
@@ -18,7 +19,6 @@ class MainController:
     public utility::pattern::IInitializable,
     public utility::pattern::Singleton<MainController>,
     public model::IInventory
-
 {
 public:
     MainController() = default;

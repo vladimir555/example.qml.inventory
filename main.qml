@@ -15,7 +15,6 @@ ApplicationWindow {
         console.log(output)
     }
 
-
     visible: true
     width: 310
     height: 270
@@ -24,8 +23,31 @@ ApplicationWindow {
     maximumWidth: width
     maximumHeight: height
     title: qsTr("Inventory")
-    id: windowMain
-    objectName: "windowMain"
+    id: root
+    objectName: "root"
+
+    function initializeQML() {
+        for (var i = 0; i < repeaterItems.items.length; i++) {
+            var cell = repeaterItems.getCell(i)
+
+            if (cell.count === 0 || cell.url === "") {
+                repeaterItems.items[i].text.text        = ""
+                repeaterItems.items[i].image.source     = ""
+                repeaterItems.items[i].image.visible    = false
+            } else {
+                repeaterItems.items[i].text.text        = cell.count
+                repeaterItems.items[i].image.source     = cell.url
+                repeaterItems.items[i].image.visible    = true
+            }
+        }
+    }
+
+    Timer {
+        interval: 1
+        running: true
+        repeat: false
+        onTriggered: initializeQML()
+    }
 
     GridLayout {
         id: gridWindow
@@ -59,7 +81,7 @@ ApplicationWindow {
                 id: buttonExit
                 width: parent.width / 2
 
-                onClicked: windowMain.close()
+                onClicked: root.close()
             }
         }
 
@@ -68,8 +90,6 @@ ApplicationWindow {
             rows: 1
 
             Layout.alignment: Qt.AlignCenter
-
-
 
             GridLayout {
                 id: gridPlayground
@@ -80,10 +100,12 @@ ApplicationWindow {
 
                 Repeater {
                     id: repeaterItems
+                    objectName: "repeaterItems"
                     model: 9
 
                     property var items: []
                     function onIndexCreate(index, text, image) {
+//                        console.log("onIndexCreate: " + index)
                         items.push({"text": text, "image": image})
                         return index
                     }
@@ -92,7 +114,7 @@ ApplicationWindow {
                         var pos  =   Qt.size(index % gridPlayground.columns,
                                   Math.floor(index / gridPlayground.columns))
                         var cell = form.onGetCell(pos)
-                        return JSON.stringify(cell)
+                        return JSON.parse(cell)
                     }
 
                     delegate: Rectangle {
@@ -161,6 +183,22 @@ ApplicationWindow {
                                 repeaterItems.items[index_from].image.visible = false
                             }
                         }
+
+                        states: [
+                            State {
+                                when: item.Drag.active
+                                ParentChange {
+                                    target: item
+                                    parent: root
+                                }
+
+                                AnchorChanges {
+                                    target: item
+                                    anchors.horizontalCenter: undefined
+                                    anchors.verticalCenter: undefined
+                                }
+                            }
+                        ]
                     }
                 }
             }
@@ -216,9 +254,13 @@ ApplicationWindow {
                     text: qsTr("Menu")
                     id: buttonMenu
                     Layout.alignment: Qt.AlignRight
-                    onClicked: gridMenu.visible = true
+                    onClicked: {
+                        initializeQML()
+                        gridMenu.visible = true
+                    }
                 }
             }
         }
     }
+
 }

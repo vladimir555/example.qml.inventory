@@ -6,6 +6,7 @@
 #include <QQmlContext>
 #include <QJsonObject>
 #include <QJsonDocument>
+#include <QQuickItem>
 
 
 using model::TCell;
